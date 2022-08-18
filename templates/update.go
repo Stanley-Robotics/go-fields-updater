@@ -14,12 +14,14 @@ const fieldsTypeFormat = `
 
 type %[1]sFields int
 
+type %[1]sFieldUpdates map[%[1]sFields]interface{}
+
 const (
 %[2]s
 )
 
 // UpdateFromFields updates the fields of the %[1]s struct from the given fields map.
-func (t *%[1]s) UpdateFromFields(fields map[%[1]sFields]interface{}) error {
+func (t *%[1]s) UpdateFromFields(fields %[1]sFieldUpdates) error {
 	// ensure consistency of fields first
 	err := make([]string, 0, len(fields))
 	for k, v := range fields {
@@ -53,7 +55,7 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 		enums = append(enums, enum)
 
 		checkCases = append(checkCases, fmt.Sprintf(`case %s:`, enum))
-		checkCases = append(checkCases, fmt.Sprintf(`if _, ok := v.(%s); !ok {err = append(err, fmt.Sprint("invalid type for %s:", reflect.TypeOf(v), "!=", reflect.TypeOf(t.%s)))}`, field[1], field[0], field[0]))
+		checkCases = append(checkCases, fmt.Sprintf(`if _, ok := v.(%s); !ok {err = append(err, fmt.Sprint("invalid type for %s: ", reflect.TypeOf(v), " != ", reflect.TypeOf(t.%s)))}`, field[1], field[0], field[0]))
 
 		updateCases = append(updateCases, fmt.Sprintf(`case %s:`, enum))
 		updateCases = append(updateCases, fmt.Sprintf(`t.%s = v.(%s)`, field[0], field[1]))
