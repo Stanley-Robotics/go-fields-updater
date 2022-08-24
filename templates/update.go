@@ -16,6 +16,23 @@ type %[1]sField int
 
 type %[1]sFields map[%[1]sField]interface{}
 
+// Merge is a convenient method to add elements from other to this map
+func (this %[1]sFields) Merge(other %[1]sFields) {
+	for field, value := range other {
+		this[field] = value
+	}
+}
+
+// Contains returns whether the map contains at least one of the specified keys
+func (this %[1]sFields) Contains(keys ...%[1]sField) bool {
+	for _, key := range keys {
+		if _, contains := this[key]; contains {
+			return true
+		}
+	}
+	return false
+}
+
 const (
 %[2]s
 )
