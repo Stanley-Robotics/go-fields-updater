@@ -12,7 +12,7 @@ import (
 //	[4]: update cases
 const fieldsTypeFormat = `
 
-type %[1]sField int
+type %[1]sField string
 
 type %[1]sFields map[%[1]sField]interface{}
 
@@ -73,8 +73,8 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 	var checkCases []string
 	var updateCases []string
 	for _, field := range fields {
-		enumStr := fmt.Sprintf(`%sField%s`, name, field[0])
-		caseStr := fmt.Sprintf(`case %s:`, enumStr)
+		enumStr := fmt.Sprintf(`%[1]sField%[2]s %[1]sField = "%[2]s"`, name, field[0])
+		caseStr := fmt.Sprintf(`case %[1]sField%[2]s:`, name, field[0])
 
 		enums = append(enums,
 			enumStr,
@@ -91,10 +91,6 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 			caseStr,
 			fmt.Sprintf(`t.%s, _ = v.(%s)`, field[0], field[1]),
 		)
-	}
-
-	if len(enums) > 0 {
-		enums[0] = fmt.Sprintf(`%s %sField = iota`, enums[0], name)
 	}
 
 	return fmt.Sprintf(fieldsTypeFormat, name, strings.Join(enums, "\n"), strings.Join(checkCases, "\n"), strings.Join(updateCases, "\n"))
