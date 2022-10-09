@@ -33,6 +33,16 @@ func (this %[1]sFields) Contains(keys ...%[1]sField) bool {
 	return false
 }
 
+// Fields returns the sorted list of fields composing the map
+func (this %[1]sFields) Fields() []string {
+	fields := make(sort.StringSlice, 0, len(this))
+	for field := range this {
+		fields = append(fields, string(field))
+	}
+	fields.Sort()
+	return fields
+}
+
 const (
 %[2]s
 )
