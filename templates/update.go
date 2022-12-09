@@ -47,6 +47,13 @@ const (
 %[2]s
 )
 
+// GetFieldsValues returns the %[1]s struct value as %[1]sFields representation.
+func (t *%[1]s) GetFieldsValues() %[1]sFields {
+	return %[1]sFields {
+		%[3]s
+	}
+}
+
 // UpdateField updates the specified field of the %[1]s struct.
 func (t *%[1]s) UpdateField(field %[1]sField, value interface{}) error {
 	return t.UpdateFields(%[1]sFields{field: value})
@@ -58,7 +65,7 @@ func (t *%[1]s) UpdateFields(fields %[1]sFields) error {
 	err := make([]string, 0, len(fields))
 	for k, v := range fields {
 		switch k {
-		%[3]s
+		%[4]s
 		}
 	}
 
@@ -69,7 +76,7 @@ func (t *%[1]s) UpdateFields(fields %[1]sFields) error {
 	// proceed with updating fields
 	for k, v := range fields {
 		switch k {
-		%[4]s
+		%[5]s
 		}
 	}
 
@@ -80,6 +87,7 @@ func (t *%[1]s) UpdateFields(fields %[1]sFields) error {
 // GenerateFields generates the fields enum and the updateFromFields function.
 func GenerateUpdateFromFields(name string, fields [][2]string) string {
 	var enums []string
+	var values []string
 	var checkCases []string
 	var updateCases []string
 	for _, field := range fields {
@@ -88,6 +96,10 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 
 		enums = append(enums,
 			enumStr,
+		)
+
+		values = append(values,
+			fmt.Sprintf("%[1]sField%[2]s: t.%[2]s,", name, field[0]),
 		)
 
 		checkCases = append(checkCases,
@@ -103,5 +115,5 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 		)
 	}
 
-	return fmt.Sprintf(fieldsTypeFormat, name, strings.Join(enums, "\n"), strings.Join(checkCases, "\n"), strings.Join(updateCases, "\n"))
+	return fmt.Sprintf(fieldsTypeFormat, name, strings.Join(enums, "\n"), strings.Join(values, "\n"), strings.Join(checkCases, "\n"), strings.Join(updateCases, "\n"))
 }
