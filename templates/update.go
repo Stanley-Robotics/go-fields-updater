@@ -48,7 +48,7 @@ const (
 )
 
 // GetFieldsValues returns the %[1]s struct value as %[1]sFields representation.
-func (t *%[1]s) GetFieldsValues() %[1]sFields {
+func (t %[1]s) GetFieldsValues() %[1]sFields {
 	return %[1]sFields {
 		%[3]s
 	}
