@@ -11,7 +11,7 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/imports"
 
-	"github.com/aurelbec/go-fields-updater/templates"
+	"github.com/stanley-robotics/go-fields-updater/templates"
 )
 
 // Generator holds the state of the analysis. Primarily used to buffer

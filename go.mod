@@ -1,4 +1,4 @@
-module github.com/aurelbec/go-fields-updater
+module github.com/stanley-robotics/go-fields-updater
 
 go 1.18
 
