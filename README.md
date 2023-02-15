@@ -36,7 +36,7 @@ When Go-Fields-Updater is applied to a structure, it will generate:
       - Method `Contains`: returns whether or not any of the specified `<Type>Field` is part of the current `<Type>Fields`.
       - Method `Fields`: returns the ordered list of `<Type>Field` currently present in the map.
 
-For example, if we have an structure type called `Person`,
+For example, if we have a structure type called `Person`,
 
 ```go
 type gender int
@@ -47,7 +47,7 @@ const (
 )
 
 type Person struct {
-	Name      string
+    Name      string
     Gender    gender
     age       int
     Relatives []Person
