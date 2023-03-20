@@ -85,7 +85,7 @@ func (t *%[1]s) UpdateFields(fields %[1]sFields) error {
 `
 
 // GenerateFields generates the fields enum and the updateFromFields function.
-func GenerateUpdateFromFields(name string, fields [][2]string) string {
+func GenerateUpdateFromFields(name string, fields [][2]string, skipForUpdates map[string]bool) string {
 	var enums []string
 	var values []string
 	var checkCases []string
@@ -102,17 +102,19 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 			fmt.Sprintf("%[1]sField%[2]s: t.%[2]s,", name, field[0]),
 		)
 
-		checkCases = append(checkCases,
-			caseStr,
-			fmt.Sprintf(`if _, ok := v.(%[2]s); !ok && v != nil {
+		if len(skipForUpdates) == 0 || !skipForUpdates[field[0]] {
+			checkCases = append(checkCases,
+				caseStr,
+				fmt.Sprintf(`if _, ok := v.(%[2]s); !ok && v != nil {
 			                err = append(err, fmt.Sprintf("value for %[1]s is not %%%%s (got %%%%T)", reflect.TypeOf(&t.%[1]s).Elem(), v))
 							}`, field[0], field[1]),
-		)
+			)
 
-		updateCases = append(updateCases,
-			caseStr,
-			fmt.Sprintf(`t.%s, _ = v.(%s)`, field[0], field[1]),
-		)
+			updateCases = append(updateCases,
+				caseStr,
+				fmt.Sprintf(`t.%s, _ = v.(%s)`, field[0], field[1]),
+			)
+		}
 	}
 
 	return fmt.Sprintf(fieldsTypeFormat, name, strings.Join(enums, "\n"), strings.Join(values, "\n"), strings.Join(checkCases, "\n"), strings.Join(updateCases, "\n"))

@@ -91,16 +91,11 @@ func (f *File) genDecl(node ast.Node) bool {
 					continue
 				}
 
-				updatable := (field.Tag == nil || !ignoreUpdateRx.Match([]byte(field.Tag.Value)))
-				if !updatable {
-					continue
-				}
-
 				f.fields = append(f.fields, Field{
 					structName:     f.typeName,
 					fieldName:      name.Name,
 					fieldType:      fieldType,
-					fieldUpdatable: updatable,
+					fieldUpdatable: (field.Tag == nil || !ignoreUpdateRx.Match([]byte(field.Tag.Value))),
 				})
 			}
 		}

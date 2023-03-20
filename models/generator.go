@@ -103,9 +103,11 @@ func (g *Generator) Generate(typeName string) {
 	}
 
 	list := make([][2]string, len(fields))
+	skipForUpdates := make(map[string]bool, len(fields))
 	for i, field := range fields {
 		// log.Print("found ", field)
 		list[i] = [2]string{field.fieldName, field.fieldType}
+		skipForUpdates[field.fieldName] = !field.fieldUpdatable
 	}
-	g.Printf(templates.GenerateUpdateFromFields(typeName, list))
+	g.Printf(templates.GenerateUpdateFromFields(typeName, list, skipForUpdates))
 }
