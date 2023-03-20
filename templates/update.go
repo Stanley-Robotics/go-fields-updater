@@ -106,7 +106,7 @@ func GenerateUpdateFromFields(name string, fields [][2]string) string {
 			caseStr,
 			fmt.Sprintf(`if _, ok := v.(%[2]s); !ok && v != nil {
 			                err = append(err, fmt.Sprintf("value for %[1]s is not %%%%s (got %%%%T)", reflect.TypeOf(&t.%[1]s).Elem(), v))
-			             }`, field[0], field[1]),
+							}`, field[0], field[1]),
 		)
 
 		updateCases = append(updateCases,

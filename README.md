@@ -123,6 +123,17 @@ fmt.Println(me.GetFieldsValues()) // Will print "map[Gender:0 Name:Bob Relatives
 
 Note that it does not allow updates on private fields.
 
+To disable updates on public fields anyway, use the `"-"` option with the field tag `updater`:
+
+```go
+type Person struct {
+    Name      string `updater:"-"`
+    Gender    gender
+    age       int
+    Relatives []Person
+}
+```
+
 
 ## How to use
 

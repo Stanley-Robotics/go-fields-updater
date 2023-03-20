@@ -5,6 +5,11 @@ import (
 	"go/token"
 	"log"
 	"os"
+	"regexp"
+)
+
+var (
+	ignoreUpdateRx = regexp.MustCompile(`.*updater:".*-.*".*`)
 )
 
 // File holds a single parsed file and associated data.
@@ -86,10 +91,16 @@ func (f *File) genDecl(node ast.Node) bool {
 					continue
 				}
 
+				updatable := (field.Tag == nil || !ignoreUpdateRx.Match([]byte(field.Tag.Value)))
+				if !updatable {
+					continue
+				}
+
 				f.fields = append(f.fields, Field{
-					structName: f.typeName,
-					fieldName:  name.Name,
-					fieldType:  fieldType,
+					structName:     f.typeName,
+					fieldName:      name.Name,
+					fieldType:      fieldType,
+					fieldUpdatable: updatable,
 				})
 			}
 		}
