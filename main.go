@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -82,7 +81,7 @@ func main() {
 	}
 
 	// Write to tmpfile first
-	tmpFile, err := ioutil.TempFile(dir, fmt.Sprintf("%s_updater_", types[0]))
+	tmpFile, err := os.CreateTemp(dir, fmt.Sprintf("%s_updater_", types[0]))
 	if err != nil {
 		log.Fatalf("creating temporary file for output: %s", err)
 	}
